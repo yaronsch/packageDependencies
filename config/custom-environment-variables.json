@@ -1,0 +1,11 @@
+{
+  "server": {
+    "port": "PORT"
+  },
+  "cache": {
+    "useCache": "USE_CACHE",
+    "redisHost": "REDIS_HOST",
+    "redisPort": "REDIS_PORT",
+    "ttl": "CACHE_TTL"
+  }
+}

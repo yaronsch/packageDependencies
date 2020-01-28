@@ -1,0 +1,27 @@
+{
+  "name": "packagedependencies",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yaron Schwimmer",
+  "license": "ISC",
+  "eslintConfig": {
+    "extends": "perimeterx"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "config": "^3.2.5",
+    "fastify": "^2.11.0",
+    "fastify-redis": "^3.1.1",
+    "semver": "^7.1.1",
+    "treeify": "^1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-perimeterx": "^0.5.0"
+  }
+}
