@@ -49,7 +49,7 @@ async function getDependencies(packageName, version, depth = 1) {
             dependencies = {...deps.dependencies, ...deps.devDependencies};
         } catch {
             //ignore failures
-            dependencies = {};
+            return res;
         }
     }
     // save cache for later
