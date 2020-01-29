@@ -12,14 +12,16 @@ const registryURL = 'https://registry.npmjs.org';
 
 /**
  * Request handler for the router
- * @param   {object}  req  a Fastify request object
+ * @param   {object}  req  an express request object
+ * @param   {object}  res  an express response object
  * @return  {object}       dependencies tree
  */
-async function getPackageInfo(req) {
+async function getPackageInfo(req, res) {
     const packageName = req.params.package;
     const version = req.params.version;
     const depth = req.query.depth;
-    return getDependencies(packageName, version, depth);
+    const dependencies = await getDependencies(packageName, version, depth);
+    res.send(dependencies);
 }
 
 /**
