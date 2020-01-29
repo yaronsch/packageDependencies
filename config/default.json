@@ -6,8 +6,8 @@
     "retries": 2
   },
   "cache": {
-    "useCache": true,
-    "redisHost": "redis",
+    "useCache": false,
+    "redisHost": "localhost",
     "redisPort": 6379,
     "ttl": 86400
   }

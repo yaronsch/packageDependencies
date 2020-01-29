@@ -1,5 +1,9 @@
 const semver = require('semver');
 const config = require('config');
+let redisClient;
+if (config.cache.useCache) {
+    redisClient = require('../cache/redis_client');
+}
 const axios = require('axios');
 const axiosRetry = require('axios-retry');
 axiosRetry(axios, {retries: config.requests.retries});
@@ -26,19 +30,34 @@ async function getPackageInfo(req) {
  * @return  {object}               dependencies tree
  */
 async function getDependencies(packageName, version, depth = 1) {
+    const useCache = config.cache.useCache;
     version = parseVersion(version);
     const res = {name: packageName, version: version, dependencies: []};
     if (depth === 0) {
         return res;
     }
-    let deps;
-    try {
-        deps = (await axios.get(`${registryURL}/${packageName}/${version}`)).data;
-    } catch {
-        //ignore failures
-        deps = {dependencies: {}, devDependencies: {}};
+    let dependencies;
+    let fromCache;
+    if (useCache) {
+        dependencies = await redisClient.getDependencies('npm', packageName, version);
+        fromCache = true;
     }
-    const dependencies = {...deps.dependencies, ...deps.devDependencies};
+    if (!dependencies) {
+        fromCache = false;
+        try {
+            const deps = (await axios.get(`${registryURL}/${packageName}/${version}`)).data;
+            dependencies = {...deps.dependencies, ...deps.devDependencies};
+        } catch {
+            //ignore failures
+            dependencies = {};
+        }
+    }
+    // save cache for later
+    if (!fromCache && useCache) {
+        redisClient.setDependencies('npm', packageName, version, dependencies);
+    }
+
+    // get sub-dependencies
     const subDeps = [];
     for (const key in dependencies) {
         subDeps.push(getDependencies(key, dependencies[key], depth - 1));
@@ -49,6 +68,7 @@ async function getDependencies(packageName, version, depth = 1) {
             res.dependencies.push(subDep.value);
         }
     }
+
     return res;
 }
 
