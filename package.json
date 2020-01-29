@@ -5,15 +5,20 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "lint": "npx eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Yaron Schwimmer",
   "license": "ISC",
   "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2019
+    },
     "extends": "perimeterx"
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "axios-retry": "^3.1.2",
     "config": "^3.2.5",
     "fastify": "^2.11.0",
     "fastify-redis": "^3.1.1",

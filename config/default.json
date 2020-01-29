@@ -2,6 +2,9 @@
   "server": {
     "port": 3000
   },
+  "requests": {
+    "retries": 2
+  },
   "cache": {
     "useCache": true,
     "redisHost": "redis",
