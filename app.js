@@ -6,6 +6,7 @@ const express = require('express');
 const app = express();
 
 app.use('/npm', npmRouter.router);
+
 app.listen(config.server.port, () => {
     console.log(`server is listening on port ${config.server.port}`);
 });

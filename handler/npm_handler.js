@@ -17,10 +17,13 @@ const registryURL = 'https://registry.npmjs.org';
  * @return  {object}       dependencies tree
  */
 async function getPackageInfo(req, res) {
+    const start = Date.now();
     const packageName = req.params.package;
     const version = req.params.version;
     const depth = req.query.depth;
     const dependencies = await getDependencies(packageName, version, depth);
+    const elapsed = Date.now() - start;
+    console.debug(`Get dependencies for ${packageName} v${version}. Request time: ${elapsed}ms`);
     res.send(dependencies);
 }
 
@@ -35,7 +38,7 @@ async function getDependencies(packageName, version, depth = 1) {
     const useCache = config.cache.useCache;
     version = parseVersion(version);
     const res = {name: packageName, version: version, dependencies: []};
-    if (depth === 0) {
+    if (depth <= 0) {
         return res;
     }
     let dependencies;
